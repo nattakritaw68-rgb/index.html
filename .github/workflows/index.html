@@ -1,0 +1,223 @@
+
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>บันทึกรายรับรายจ่าย</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Kanit', sans-serif; background-color: #121212; color: #e0e0e0; }
+        .card-bg { background-color: #1e1e1e; }
+    </style>
+</head>
+<body class="p-4 md:p-8">
+
+    <div class="max-w-4xl mx-auto">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+            <div class="card-bg p-6 rounded-xl shadow-lg text-center border-t-4 border-green-500">
+                <p class="text-gray-400 text-sm">รายรับทั้งหมด</p>
+                <p class="text-3xl font-bold text-green-500 mt-2" id="total-income">0</p>
+            </div>
+            <div class="card-bg p-6 rounded-xl shadow-lg text-center border-t-4 border-red-500">
+                <p class="text-gray-400 text-sm">รายจ่ายทั้งหมด</p>
+                <p class="text-3xl font-bold text-red-500 mt-2" id="total-expense">0</p>
+            </div>
+            <div class="card-bg p-6 rounded-xl shadow-lg text-center border-t-4 border-blue-500">
+                <p class="text-gray-400 text-sm">ยอดคงเหลือ</p>
+                <p class="text-3xl font-bold text-blue-400 mt-2" id="total-balance">0</p>
+            </div>
+        </div>
+
+        <div class="mb-4 flex items-center">
+            <span class="text-xl">📜 ประวัติรายการ</span>
+        </div>
+
+        <div class="overflow-hidden rounded-xl border border-gray-700">
+            <table class="w-full text-left border-collapse">
+                <thead>
+                    <tr class="bg-blue-600 text-white">
+                        <th class="p-4 font-medium">วันที่</th>
+                        <th class="p-4 font-medium">หมวดหมู่</th>
+                        <th class="p-4 font-medium">ประเภท</th>
+                        <th class="p-4 font-medium text-right">จำนวนเงิน</th>
+                        <th class="p-4 font-medium text-center">จัดการ</th>
+                    </tr>
+                </thead>
+                <tbody id="transaction-list">
+                    </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        // ข้อมูลตัวอย่าง (เลียนแบบในรูป)
+        const transactions = [
+            { date: '2026-01-19', title: 'ข้าวไข่เจียวหมูสับ', type: 'expense', amount: 60 },
+            { date: '2026-01-20', title: 'ไก่kfc', type: 'expense', amount: 150 },
+            { date: '2026-01-21', title: 'ร้านขายของชำ', type: 'income', amount: 3000 },
+            { date: '2026-01-22', title: 'ร้านขายของชำ', type: 'income', amount: 2500},
+            { date: '2026-01-23', title: 'ร้านซูชิ', type: 'expense', amount: 350}
+        ];
+
+        function renderData() {
+            const list = document.getElementById('transaction-list');
+            let income = 0;
+            let expense = 0;
+            list.innerHTML = '';
+
+            transactions.forEach((item, index) => {
+                const isIncome = item.type === 'income';
+                if (isIncome) income += item.amount; else expense += item.amount;
+
+                list.innerHTML += `
+                    <tr class="border-t border-gray-800 hover:bg-gray-800 transition">
+                        <td class="p-4 text-gray-400 text-sm">${item.date}</td>
+                        <td class="p-4 font-light">${item.title}</td>
+                        <td class="p-4 ${isIncome ? 'text-green-500' : 'text-red-500'}">
+                            ${isIncome ? 'รายรับ' : 'รายจ่าย'}
+                        </td>
+                        <td class="p-4 text-right font-bold ${isIncome ? 'text-green-500' : 'text-red-500'}">
+                            ${item.amount.toLocaleString()}
+                        </td>
+                        <td class="p-4 text-center">
+                            <button class="bg-red-900/30 text-red-500 border border-red-900 px-3 py-1 rounded text-xs hover:bg-red-500 hover:text-white transition">ลบ</button>
+                        </td>
+                    </tr>
+                `;
+            });
+
+            document.getElementById('total-income').innerText = income.toLocaleString();
+            document.getElementById('total-expense').innerText = expense.toLocaleString();
+            document.getElementById('total-balance').innerText = (income - expense).toLocaleString();
+        }
+
+        renderData();
+    </script>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>บันทึกรายรับรายจ่าย</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Kanit', sans-serif; background-color: #121212; color: #e0e0e0; }
+        .card-bg { background-color: #1e1e1e; }
+        input, select { background-color: #2d2d2d !important; border: 1px solid #444 !important; color: white !important; }
+    </style>
+</head>
+<body class="p-4 md:p-8">
+
+    <div class="max-w-4xl mx-auto">
+        <h1 class="text-2xl mb-6 text-center">📊 โปรแกรมบัญชีของฉัน</h1>
+
+        <div class="card-bg p-6 rounded-xl shadow-lg mb-8 border border-gray-700">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <input type="date" id="date" class="p-2 rounded mt-1 text-sm">
+                <input type="text" id="title" placeholder="ชื่อรายการ (เช่น ค่าข้าว)" class="p-2 rounded mt-1 text-sm">
+                <select id="type" class="p-2 rounded mt-1 text-sm">
+                    <option value="income">รายรับ</option>
+                    <option value="expense">รายจ่าย</option>
+                </select>
+                <input type="number" id="amount" placeholder="จำนวนเงิน" class="p-2 rounded mt-1 text-sm">
+            </div>
+            <button onclick="addData()" class="w-full mt-4 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 rounded-lg transition">
+                + เพิ่มรายการ
+            </button>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+            <div class="card-bg p-6 rounded-xl shadow-lg text-center border-t-4 border-green-500">
+                <p class="text-gray-400 text-sm">รายรับรวม</p>
+                <p class="text-3xl font-bold text-green-500 mt-2" id="total-income">0</p>
+            </div>
+            <div class="card-bg p-6 rounded-xl shadow-lg text-center border-t-4 border-red-500">
+                <p class="text-gray-400 text-sm">รายจ่ายรวม</p>
+                <p class="text-3xl font-bold text-red-500 mt-2" id="total-expense">0</p>
+            </div>
+            <div class="card-bg p-6 rounded-xl shadow-lg text-center border-t-4 border-blue-500">
+                <p class="text-gray-400 text-sm">คงเหลือ</p>
+                <p class="text-3xl font-bold text-blue-400 mt-2" id="total-balance">0</p>
+            </div>
+        </div>
+
+        <div class="overflow-hidden rounded-xl border border-gray-700">
+            <table class="w-full text-left border-collapse">
+                <thead>
+                    <tr class="bg-blue-600 text-white">
+                        <th class="p-4 font-medium">วันที่</th>
+                        <th class="p-4 font-medium">รายการ</th>
+                        <th class="p-4 font-medium text-right">จำนวนเงิน</th>
+                        <th class="p-4 font-medium text-center">จัดการ</th>
+                    </tr>
+                </thead>
+                <tbody id="transaction-list"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        // โหลดข้อมูลจาก LocalStorage หรือถ้าไม่มีให้เป็นอาเรย์ว่าง
+        let transaction = JSON.parse(localStorage.getItem('my_accounts')) || [];
+
+        function addData() {
+            const date = document.getElementById('date').value;
+            const title = document.getElementById('title').value;
+            const type = document.getElementById('type').value;
+            const amount = parseFloat(document.getElementById('amount').value);
+
+            if (!date || !title || !amount) return alert("กรุณากรอกข้อมูลให้ครบ");
+
+            transactions.push({ date, title, type, amount });
+            saveAndRender();
+            
+            // ล้างค่าในช่องกรอก
+            document.getElementById('title').value = '';
+            document.getElementById('amount').value = '';
+        }
+
+        function deleteData(index) {
+            transactions.splice(index, 1);
+            saveAndRender();
+        }
+
+        function saveAndRender() {
+            localStorage.setItem('my_accounts', JSON.stringify(transactions));
+            renderData();
+        }
+
+        function renderData() {
+            const list = document.getElementById('transaction-list');
+            let income = 0, expense = 0;
+            list.innerHTML = '';
+
+            transactions.sort((a, b) => new Date(b.date) - new Date(a.date)).forEach((item, index) => {
+                const isIncome = item.type === 'income';
+                if (isIncome) income += item.amount; else expense += item.amount;
+
+                list.innerHTML += `
+                    <tr class="border-t border-gray-800 hover:bg-gray-800 transition">
+                        <td class="p-4 text-gray-400 text-sm">${item.date}</td>
+                        <td class="p-4">${item.title} <span class="text-xs ${isIncome ? 'text-green-500' : 'text-red-500'} ml-2">(${isIncome ? 'รายรับ' : 'รายจ่าย'})</span></td>
+                        <td class="p-4 text-right font-bold ${isIncome ? 'text-green-500' : 'text-red-500'}">${item.amount.toLocaleString()}</td>
+                        <td class="p-4 text-center">
+                            <button onclick="deleteData(${index})" class="text-red-500 border border-red-900 px-2 py-1 rounded text-xs">ลบ</button>
+                        </td>
+                    </tr>
+                `;
+            });
+
+            document.getElementById('total-income').innerText = income.toLocaleString();
+            document.getElementById('total-expense').innerText = expense.toLocaleString();
+            document.getElementById('total-balance').innerText = (income - expense).toLocaleString();
+        }
+
+        renderData();
+    </script>
+</body>
+</html>
